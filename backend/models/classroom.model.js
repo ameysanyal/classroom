@@ -6,20 +6,22 @@ const classroomSchema = new mongoose.Schema({
         required: true
     },
     teacher: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "User"
     },
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    // students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     schedule: [
         {
-            day: { type: String, required: true },
             startTime: { type: String, required: true },
             endTime: { type: String, required: true },
+            startDay: { type: String, required: true },
+            endDay: { type: String, required: true },
         },
     ],
 }, {
     timestamps: true
 });
 
+const Classroom = mongoose.model("Classroom", classroomSchema);
 
-export default Classroom = mongoose.model("Classroom", classroomSchema);
+export default Classroom

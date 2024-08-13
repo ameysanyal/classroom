@@ -35,58 +35,63 @@ const StudentTable = () => {
 
     return (
         <>
-            <table className='w-full border-separate border-spacing-2 p-6'>
-                <thead>
-                    <tr>
-                        <th className='border border-slate-600 rounded-md'>No</th>
-                        <th className='border border-slate-600 rounded-md'>Student Name</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>Classroom Attending</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>Email</th>
-                        <th className='border border-slate-600 rounded-md'>Password</th>
-                        <th className='border border-slate-600 rounded-md'>Operations</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div className='overflow-y-auto h-128'>
+                <table className='w-full border-separate border-spacing-2 p-6'>
+                    <thead>
+                        <tr>
+                            <th className='border border-slate-600 rounded-md'>No</th>
+                            <th className='border border-slate-600 rounded-md'>Student Name</th>
 
-                    {students.map((student, index) => (
-                        <tr key={student._id} className='h-8'>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {index + 1}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {student.name}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                                {student.assignedClassroom}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                                {student.email}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                                {student.password}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                                <div className='flex justify-center gap-x-4'>
-
-                                    {/* <BsInfoCircle title="info" className='cursor-pointer text-2xl text-green-800' /> */}
-
-                                    <AiOutlineEdit title="edit" className='cursor-pointer text-2xl text-yellow-800' onClick={() => { setEdit(true); setIndexId(student._id) }} />
-
-                                    <MdOutlineDelete title="delete" className='cursor-pointer text-2xl text-red-800' onClick={() => { handleDeleteUser(student._id) }} />
-
-                                </div>
-
-                            </td>
+                            <th className='border border-slate-600 rounded-md'>Email</th>
+                            <th className='border border-slate-600 rounded-md'>Password</th>
+                            <th className='border border-slate-600 rounded-md'>Operations</th>
                         </tr>
-                    ))
-                    }
+                    </thead>
 
-                </tbody>
-            </table>
-            {edit && <EditUser indexid={indexid} onClose={() => setEdit(false)} />}
+                    <tbody>
+
+                        {students.map((student, index) => (
+                            <tr key={student._id} className='h-8'>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    {index + 1}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    {student.name}
+                                </td>
+
+                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                    {student.email}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                    {student.password}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                    <div className='flex justify-center gap-x-4'>
+
+                                        {/* <BsInfoCircle title="info" className='cursor-pointer text-2xl text-green-800' /> */}
+
+                                        <AiOutlineEdit title="edit" className='cursor-pointer text-2xl text-yellow-800' onClick={() => { setEdit(true); setIndexId(student._id) }} />
+
+                                        <MdOutlineDelete title="delete" className='cursor-pointer text-2xl text-red-800' onClick={() => { handleDeleteUser(student._id) }} />
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        ))
+                        }
+
+                    </tbody>
+
+                </table>
+            </div>
+            {edit && <EditUser indexid={indexid} onClose={() => setEdit(false)} />
+            }
+
         </>
 
     )
 }
 
 export default StudentTable
+

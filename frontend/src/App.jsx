@@ -9,6 +9,9 @@ import axios from 'axios';
 function App() {
 
   const [users, setUsers] = useState([])
+  const [classrooms, setClassrooms] = useState([])
+  const [teachers, setTeachers] = useState([])
+  const [userId, setUserId] = useState('')
 
 
   useEffect(() => {
@@ -20,15 +23,24 @@ function App() {
     })
   }, [users])
 
+  useEffect(() => {
+    axios.get("http://localhost:4000/api/classroom").then((res) => {
+
+      setClassrooms(res.data.data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }, [classrooms])
+
   return (
     <>
-      <MyContext.Provider value={{ users, setUsers }}>
+      <MyContext.Provider value={{ users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId }}>
         <Router>
           <Routes>
             <Route path='/' element={<Login />} />
             <Route path='/principal-dashboard' element={<PrincipalDash />} />
-            <Route path='/teacher-dashboard' element={<TeacherDash />} />
-            <Route path='/student-dashboard' element={<StudentDash />} />
+            <Route path='/teacher-dashboard' element={<TeacherDash userId={userId} />} />
+            <Route path='/student-dashboard' element={<StudentDash userId={userId} />} />
           </Routes>
         </Router>
       </MyContext.Provider>
@@ -39,24 +51,3 @@ function App() {
 export default App
 
 
-// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-// import Login from './components/Login';
-// import PrincipalDashboard from './components/PrincipalDashboard';
-// import TeacherDashboard from './components/TeacherDashboard';
-// import StudentView from './components/StudentView';
-
-// function App() {
-//   return (
-//     <Router>
-//       <Switch>
-//         <Route path="/login" component={Login} />
-//         <Route path="/principal-dashboard" component={PrincipalDashboard} />
-//         <Route path="/teacher-dashboard" component={TeacherDashboard} />
-//         <Route path="/student-view" component={StudentView} />
-//         <Route path="/" component={Login} />
-//       </Switch>
-//     </Router>
-//   );
-// }
-
-// export default App;

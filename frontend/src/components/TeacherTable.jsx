@@ -7,10 +7,11 @@ import EditUser from './EditUser';
 import axios from 'axios';
 
 const TeacherTable = () => {
-    const [teachers, setTeachers] = useState([])
+
     const [edit, setEdit] = useState(false)
     const [indexid, setIndexId] = useState()
     const { users, setUsers } = useContext(MyContext)
+    const { teachers, setTeachers } = useContext(MyContext)
 
     useEffect(() => {
         axios.get("http://localhost:4000/api/principal").then((res) => {
@@ -19,7 +20,7 @@ const TeacherTable = () => {
         }).catch((err) => {
             console.log(err)
         })
-    }, [users]) // for first mount
+    }, [users])
 
 
     const handleDeleteUser = (id) => {
@@ -41,8 +42,8 @@ const TeacherTable = () => {
                     <tr>
                         <th className='border border-slate-600 rounded-md'>No</th>
                         <th className='border border-slate-600 rounded-md'> Teacher Name</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>Assigned Classroom</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>Email</th>
+
+                        <th className='border border-slate-600 rounded-md'>Email</th>
                         <th className='border border-slate-600 rounded-md'>Password</th>
                         <th className='border border-slate-600 rounded-md'>Operations</th>
                     </tr>
@@ -57,9 +58,7 @@ const TeacherTable = () => {
                             <td className='border border-slate-700 rounded-md text-center'>
                                 {teacher.name}
                             </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                                {teacher.assignedClassroom}
-                            </td>
+
                             <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
                                 {teacher.email}
                             </td>

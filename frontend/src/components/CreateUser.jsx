@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { MdOutlineClose } from "react-icons/md"
 import axios from 'axios'
 
-
-const CreateUser = ({ onClose }) => {
-    const [userType, setUserType] = useState("Teacher")
+const CreateUser = ({ onClose, userArray }) => {
+    const [userType, setUserType] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -26,10 +26,10 @@ const CreateUser = ({ onClose }) => {
             })
     }
 
-
     return (
-        <div className="fixed bg-black bg-opacity-60 top-0 left-0 right-0 bottom-0 z-50 flex flex-col justify-center items-center" onClick={onClose}>
+        <div className="fixed bg-black bg-opacity-60 top-0 left-0 right-0 bottom-0 z-50 flex flex-col justify-center items-center">
             <div className="bg-gray-800 flex flex-col rounded-md p-2 relative w-1/2" onClick={(e) => { e.stopPropagation() }}>
+                <MdOutlineClose className='text-white m-1 cursor-pointer absolute top-4 right-4' title="close" size={30} onClick={onClose} />
                 <h2 className='text-2xl text-white m-2 text-center'>Create User</h2>
 
                 <div className='flex flex-row justify-center items-center'>
@@ -42,8 +42,8 @@ const CreateUser = ({ onClose }) => {
                                     setUserType(e.target.value)
                                 }}
                                 className='border-2 border-gray-500 p-1 w-1/3' name="userType" id="userType">
-                                <option value="Teacher">Teacher</option>
-                                <option value="Student">Student</option>
+
+                                {userArray.map((user, i) => <option key={i} value={user}>{user}</option>)}
                             </select>
                         </div>
                         <div className='my-2'>

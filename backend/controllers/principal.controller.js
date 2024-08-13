@@ -1,8 +1,12 @@
 import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 export const createUser = async (req, res) => {
     try {
+
         const { userType, name, email, password } = req.body;
+        // const salt = await bcrypt.genSalt(10);
+        // const hashedPassword = await bcrypt.hash(password, salt);
         if (!name || !email || !password || !userType) {
             return res.status(400).json({
                 message: 'Send all the required fields',
@@ -11,7 +15,10 @@ export const createUser = async (req, res) => {
 
         const newUser = { userType, name, email, password };
         const user = await User.create(newUser);
-        return res.status(201).json(user);
+        return res.status(201).json({
+            msg: "User Created Sucessfully", token: await user.generateToken(),
+            userId: user._id.toString(),
+        });
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ message: error.message });
@@ -55,7 +62,18 @@ export const editUser = async (req, res) => {
         }
 
         const { id } = req.params;
-        const user = await User.findByIdAndUpdate(id, req.body, { new: true });
+
+        let updateData = {
+            userType, name, email
+        }
+
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updateData.password = hashedPassword;
+        }
+
+        const user = await User.findByIdAndUpdate(id, updateData, { new: true });
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });

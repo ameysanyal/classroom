@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { MdOutlineClose } from "react-icons/md"
 
 const EditUser = ({ onClose, indexid }) => {
 
@@ -45,8 +46,9 @@ const EditUser = ({ onClose, indexid }) => {
     }
 
     return (
-        <div className="fixed bg-black bg-opacity-60 top-0 left-0 right-0 bottom-0 z-50 flex flex-col justify-center items-center" onClick={onClose}>
+        <div className="fixed bg-black bg-opacity-60 top-0 left-0 right-0 bottom-0 z-50 flex flex-col justify-center items-center">
             <div className="bg-gray-800 flex flex-col rounded-md p-2 relative w-1/2" onClick={(e) => { e.stopPropagation() }}>
+                <MdOutlineClose className='text-white m-1 cursor-pointer absolute top-4 right-4' title="close" size={30} onClick={onClose} />
                 <h2 className='text-2xl text-white m-2 text-center'>Edit User</h2>
 
                 <div className='flex flex-row justify-center items-center'>

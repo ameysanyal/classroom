@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors'
 // import authRoutes from './routes/auth'
 import principalRoutes from './routes/principal.route.js'
+import classroomRoutes from './routes/classroom.route.js'
+import loginRoutes from './routes/login.route.js'
 import dotenv from 'dotenv'
 
 // Initialize Express
@@ -35,13 +37,9 @@ mongoose.connect(MONGODB_URL, {
 }).catch(err => console.log(err));
 
 
-// app.use('/api/auth', authRoutes);
+app.use('/api/login', loginRoutes);
 app.use('/api/principal', principalRoutes);
-// app.use('/api/teacher', teacherRoutes);
-// app.use('/api/student', studentRoutes);
+app.use('/api/classroom', classroomRoutes);
 
 
-// auth.js: Handles authentication-related routes (login, signup).
-// principal.js: Handles routes for the principal (creating classrooms, managing teachers and students).
-// teacher.js: Handles routes specific to teacher functionalities (managing their own classroom, viewing and editing students).
-// student.js: Handles routes specific to student functionalities (viewing their classroom, interacting with other students).
+
