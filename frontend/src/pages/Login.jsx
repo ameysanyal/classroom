@@ -5,7 +5,7 @@ import axios from 'axios'
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { setUserId } = useContext(MyContext)
+    const { setUserId, token, setToken } = useContext(MyContext)
     const navigate = useNavigate()
 
     const bg = {
@@ -25,9 +25,14 @@ const Login = () => {
         // console.log(data)
         axios.post('http://localhost:4000/api/login', data).then((res) => {
 
-
-
+            setToken(res.data.token)
+            localStorage.setItem('authToken', token);
+            localStorage.getItem('authToken');
+            console.log(token)
             setUserId(res.data.userId)
+
+            // Setting up the Authorization header for future requests
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             if (res.data.userType === "Principal") {
                 navigate("/principal-dashboard");
@@ -46,6 +51,7 @@ const Login = () => {
     }
 
     return (
+
         <div className="flex items-center justify-center h-screen bg-gray-100" style={bg}>
             <div className="w-full max-w-xs">
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -92,7 +98,15 @@ const Login = () => {
                 </form>
             </div>
         </div>
+
     );
 };
 
 export default Login;
+
+
+// axios.post('http://localhost:4000/api/login', data, {
+//     headers: {
+//         Authorization: `Bearer ${token}`,
+//     }
+// })

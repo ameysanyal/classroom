@@ -12,7 +12,7 @@ const CreateClassroom = ({ onClose }) => {
 
     const days = ["Select Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
-    const { teachers, classrooms } = useContext(MyContext)
+    const { teachers, classrooms, setClassrooms } = useContext(MyContext)
     const [assignTeacher, setAssignTeacher] = useState('teacherdef')
     const [notAssigned, setNotAssigned] = useState([])
     const [name, setName] = useState('')
@@ -39,7 +39,8 @@ const CreateClassroom = ({ onClose }) => {
         axios.post('http://localhost:4000/api/classroom', data)
             .then((res) => {
                 console.log(res)
-
+                const updated = [...classrooms, res.data]
+                setClassrooms(updated)
                 onClose()
             }).catch((error) => {
                 console.log(error);

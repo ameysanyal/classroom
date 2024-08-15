@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import { MdOutlineClose } from "react-icons/md"
 import axios from 'axios'
+import { MyContext } from '../MyContext'
 
 const CreateUser = ({ onClose, userArray }) => {
     const [userType, setUserType] = useState('')
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
+    const { users, setUsers } = useContext(MyContext)
     const handleSaveUser = () => {
 
         const data = {
@@ -20,6 +21,8 @@ const CreateUser = ({ onClose, userArray }) => {
         axios.post('http://localhost:4000/api/principal', data)
             .then((res) => {
                 console.log(res)
+                const updated = [...users, res.data]
+                setUsers(updated)
                 onClose()
             }).catch((error) => {
                 console.log(error);

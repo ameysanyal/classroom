@@ -1,16 +1,22 @@
 
 import express from 'express'
-
-import { createClassroom, deleteClassroom, getClassrooms } from '../controllers/classroom.controller.js';
+import auth from '../middlewares/auth.js'
+import { createClassroom, deleteClassroom, getClassrooms, getClassroom, updateClassroomStudents, deleteAllClassrooms } from '../controllers/classroom.controller.js';
 const router = express.Router();
 
 
 // Create a Classroom
-router.post('/', createClassroom);
+router.post('/', auth, createClassroom);
 
-router.get('/', getClassrooms);
+router.get('/', auth, getClassrooms);
 
-router.delete('/:id', deleteClassroom)
+router.get('/:id', auth, getClassroom);
+
+router.patch('/:id', auth, updateClassroomStudents);
+
+router.delete('/:id', auth, deleteClassroom)
+
+router.delete('/', auth, deleteAllClassrooms)
 
 export default router;
 

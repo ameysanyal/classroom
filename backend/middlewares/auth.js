@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
     if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
     try {
-        const decoded = jwt.verify(token, 'your_jwt_secret');
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.user = decoded.user;
         next();
     } catch (err) {
@@ -13,7 +13,8 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware
+
 
 
 

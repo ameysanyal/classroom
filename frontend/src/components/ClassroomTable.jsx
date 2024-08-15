@@ -3,20 +3,31 @@ import { MyContext } from '../MyContext';
 import { MdOutlineDelete } from 'react-icons/md';
 import axios from 'axios';
 const ClassroomTable = () => {
-    const { classrooms, setClassrooms } = useContext(MyContext)
+    const { classrooms, setClassrooms, token } = useContext(MyContext)
 
     useEffect(() => {
-        axios.get("http://localhost:4000/api/classroom").then((res) => {
+        axios.get("http://localhost:4000/api/classroom", {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        }).then((res) => {
 
             setClassrooms(res.data.data)
-            console.log(res.data.data[0].schedule)
+
+
         }).catch((err) => {
             console.log(err)
         })
     }, [])
 
     const handleDeleteClassroom = (id) => {
-        axios.delete(`http://localhost:4000/api/classroom/${id}`)
+        axios.delete(`http://localhost:4000/api/classroom/${id}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            }
+        )
             .then(() => {
                 setClassrooms(classrooms.filter(classroom => classroom._id !== id));
             })
@@ -33,6 +44,7 @@ const ClassroomTable = () => {
                         <th className='border border-slate-600 rounded-md'>No</th>
                         <th className='border border-slate-600 rounded-md'> Classroom Name</th>
                         <th className='border border-slate-600 rounded-md max-md:hidden'>Teacher Assigned</th>
+                        <th className='border border-slate-600 rounded-md max-md:hidden'>No. of Students</th>
                         <th className='border border-slate-600 rounded-md max-md:hidden'>Days</th>
                         <th className='border border-slate-600 rounded-md'>Timing</th>
                         <th className='border border-slate-600 rounded-md'>Operations</th>
@@ -50,6 +62,9 @@ const ClassroomTable = () => {
                             </td>
                             <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
                                 {classroom.teacher}
+                            </td>
+                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                {classroom.students.length}
                             </td>
                             <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
                                 {/* {classroom.schedule?.startDay} to {classroom.schedule?.endDay} this is not valid */}

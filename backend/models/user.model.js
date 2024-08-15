@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
+
 const userSchema = new mongoose.Schema(
     {
         userType: {
@@ -11,7 +13,6 @@ const userSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            unique: true,
         },
         email: {
             type: String,
@@ -23,11 +24,16 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        classroom: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Classroom",
+        },
     },
     {
         timestamps: true,
     }
 );
+
 
 userSchema.pre("save", async function (next) {
     const user = this;

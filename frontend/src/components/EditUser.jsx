@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { MdOutlineClose } from "react-icons/md"
-
+import { MyContext } from '../MyContext';
 const EditUser = ({ onClose, indexid }) => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [userType, setUserType] = useState('')
-
+    const { users, setUsers, token } = useContext(MyContext)
     useEffect(() => {
 
-        axios.get(`http://localhost:4000/api/principal/${indexid}`)
+        axios.get(`http://localhost:4000/api/principal/${indexid}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 setUserType(response.data.userType)
                 setName(response.data.name);
@@ -26,7 +30,6 @@ const EditUser = ({ onClose, indexid }) => {
             })
     }, [])
 
-
     const handleEditUser = () => {
         const data = {
             userType,
@@ -35,9 +38,19 @@ const EditUser = ({ onClose, indexid }) => {
             password,
         };
 
-        axios.put(`http://localhost:4000/api/principal/${indexid}`, data)
+        axios.put(`http://localhost:4000/api/principal/${indexid}`, data, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
             .then((res) => {
-                // setTeachers(res)
+                const update = users.map((item) => {
+                    if (item._id === indexid) {
+                        return { ...data };
+                    }
+                    return item
+                })
+                setUsers(update)
                 console.log(res)
                 onClose()
             }).catch((error) => {

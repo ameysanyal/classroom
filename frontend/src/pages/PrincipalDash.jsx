@@ -1,21 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import TeacherTable from '../components/TeacherTable'
 import StudentTable from '../components/StudentTable'
 import ClassroomTable from '../components/ClassroomTable'
-import CreateUser from '../components/CreateUser'
+import CreateTeacher from '../components/CreateTeacher'
+import CreateStudent from '../components/CreateStudent'
 import CreateClassroom from '../components/CreateClassroom'
 import { useNavigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom';
+
 
 const PrincipalDash = () => {
-    const userArray = ["SelectUser", "Teacher", "Student"]
-    const [addUser, setAddUser] = useState(false)
-    const [addClassroom, setAddClassroom] = useState(false)
+
     const navigate = useNavigate()
-    const [display, setDisplay] = useState({
-        teacher: true,
-        student: false,
-        classroom: false,
-    })
+
 
     const handleLogout = () => {
         navigate('/')
@@ -26,24 +23,15 @@ const PrincipalDash = () => {
             <div className="w-full lg:w-1/6 bg-gray-800 text-white p-4">
                 <div className="text-2xl font-bold mb-6">ClassRooms</div>
                 <nav>
-                    <button onClick={() => setDisplay({
-                        teacher: true,
-                        student: false,
-                        classroom: false,
-                    })} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Teachers</button>
+                    <button onClick={() => { navigate('teacher-table') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Teachers</button>
 
-                    <button onClick={() => setDisplay({
-                        teacher: false,
-                        student: true,
-                        classroom: false,
-                    })} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Students</button>
+                    <button onClick={() => { navigate('student-table') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Students</button>
 
-                    <button onClick={() => setDisplay({
-                        teacher: false,
-                        student: false,
-                        classroom: true,
-                    })} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Classrooms</button>
+                    <button onClick={() => { navigate('classroom-table') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Classrooms</button>
 
+                    <button onClick={() => { navigate('create-teacher') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Add Teachers</button>
+                    <button onClick={() => { navigate('create-student') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Add Students</button>
+                    <button onClick={() => { navigate('create-classroom') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Add Classrooms</button>
                     <button onClick={handleLogout} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Logout</button>
                 </nav>
             </div>
@@ -53,8 +41,8 @@ const PrincipalDash = () => {
                     <h1 className="text-xl font-semibold">Admin <br />Dashboard</h1>
                     <h1 className="text-xl font-semibold">Welcome, Principal</h1>
                     <div className='flex justify-end'>
-                        <button onClick={() => setAddUser(true)} className="bg-blue-600 text-white px-2 py-1 m-1 rounded hover:bg-blue-500">Add New User</button>
-                        <button onClick={() => setAddClassroom(true)} className="bg-blue-600 text-white px-2 py-1 m-1 rounded hover:bg-blue-500">Add New Classroom</button>
+                        <button className="bg-blue-600 text-white px-2 py-1 m-1 rounded hover:bg-blue-500">Add New User</button>
+                        <button className="bg-blue-600 text-white px-2 py-1 m-1 rounded hover:bg-blue-500">Add New Classroom</button>
                     </div>
                 </header>
 
@@ -71,11 +59,18 @@ const PrincipalDash = () => {
                         <p className="text-xl font-bold">Total Classrooms: 500</p>
                     </div>
                 </div>
-                {display.teacher && <TeacherTable />}
-                {display.student && <StudentTable />}
-                {display.classroom && <ClassroomTable />}
-                {addUser && <CreateUser userArray={userArray} onClose={() => setAddUser(false)} />}
-                {addClassroom && <CreateClassroom onClose={() => setAddClassroom(false)} />}
+
+                <Routes>
+                    <Route path='teacher-table' element={<TeacherTable />} />
+                    <Route path='student-table' element={<StudentTable />} />
+                    <Route path='classroom-table' element={<ClassroomTable />} />
+                    <Route path='create-teacher' element={<CreateTeacher />} />
+                    <Route path='create-student' element={<CreateStudent />} />
+                    <Route path='create-classroom' element={<CreateClassroom />} />
+                    <Route path="*" element={<TeacherTable />} />
+                </Routes>
+
+
             </div>
         </div>
 
@@ -83,3 +78,10 @@ const PrincipalDash = () => {
 }
 
 export default PrincipalDash
+
+
+// { display.teacher && <TeacherTable /> }
+// { display.student && <StudentTable /> }
+// { display.classroom && <ClassroomTable /> }
+// { addUser && <CreateTeacher userArray={userArray} /> }
+// { addClassroom && <CreateClassroom onClose={() => setAddClassroom(false)} /> }
