@@ -3,15 +3,15 @@ import { MyContext } from "../MyContext";
 import { AiOutlineEdit } from "react-icons/ai";
 // import { BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineDelete } from "react-icons/md";
-import EditUser from "./EditUser";
+import EditStudent from "./EditStudent";
 import axios from "axios";
 import { useSnackbar } from 'notistack'
 
 const StudentTable = () => {
-    const [students, setStudents] = useState([]);
+
     const [edit, setEdit] = useState(false);
     const [indexid, setIndexId] = useState();
-    const { users, setUsers, token } = useContext(MyContext);
+    const { users, setUsers, token, students, setStudents } = useContext(MyContext);
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
@@ -80,7 +80,7 @@ const StudentTable = () => {
                                     {student.name}
                                 </td>
                                 <td className="border border-slate-700 rounded-md text-center">
-                                    {student.classroom.name || 'None'}
+                                    {student.classroom ? student.classroom.name : 'None'}
                                 </td>
                                 <td className="border border-slate-700 rounded-md text-center max-md:hidden">
                                     {student.email}
@@ -115,7 +115,7 @@ const StudentTable = () => {
                     </tbody>
                 </table>
             </div>
-            {edit && <EditUser indexid={indexid} onClose={() => setEdit(false)} />}
+            {edit && <EditStudent indexid={indexid} onClose={() => setEdit(false)} />}
         </>
     );
 };

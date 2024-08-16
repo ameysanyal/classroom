@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import { MyContext } from '../MyContext';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { MdOutlineDelete } from 'react-icons/md';
-import EditUser from './EditUser';
+import EditTeacher from "./EditTeacher"
+
 import axios from 'axios';
 import { useSnackbar } from 'notistack'
 const TeacherTable = () => {
@@ -12,7 +13,6 @@ const TeacherTable = () => {
     const { users, setUsers, token } = useContext(MyContext)
     const { teachers, setTeachers } = useContext(MyContext)
     const { enqueueSnackbar } = useSnackbar();
-
 
     useEffect(() => {
         // console.log(`teacker table ${token}`)
@@ -50,12 +50,12 @@ const TeacherTable = () => {
 
     return (
         <>
-            <table className='w-full border-separate border-spacing-2 p-6'>
+            <table className='w-full border-separate border-spacing-2 p-1'>
                 <thead>
                     <tr>
                         <th className='border border-slate-600 rounded-md'>No</th>
                         <th className='border border-slate-600 rounded-md'> Teacher Name</th>
-
+                        <th className='border border-slate-600 rounded-md'>Class Assigned</th>
                         <th className='border border-slate-600 rounded-md'>Email</th>
                         <th className='border border-slate-600 rounded-md'>Password</th>
                         <th className='border border-slate-600 rounded-md'>Operations</th>
@@ -71,14 +71,16 @@ const TeacherTable = () => {
                             <td className='border border-slate-700 rounded-md text-center'>
                                 {teacher.name}
                             </td>
-
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                            <td className='border border-slate-700 rounded-md text-center'>
+                                {teacher.classroom ? teacher.classroom.name : "None"}
+                            </td>
+                            <td className='border border-slate-700 rounded-md text-center'>
                                 {teacher.email}
                             </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                            <td className='border border-slate-700 rounded-md text-center'>
                                 {teacher.password}
                             </td>
-                            <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                            <td className='border border-slate-700 rounded-md text-center'>
                                 <div className='flex justify-center gap-x-4'>
 
 
@@ -96,7 +98,7 @@ const TeacherTable = () => {
 
                 </tbody>
             </table>
-            {edit && <EditUser indexid={indexid} onClose={() => setEdit(false)} />}
+            {edit && <EditTeacher indexid={indexid} onClose={() => setEdit(false)} />}
         </>
 
     )

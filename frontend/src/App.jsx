@@ -12,19 +12,40 @@ function App() {
   const [users, setUsers] = useState([])
   const [classrooms, setClassrooms] = useState([])
   const [teachers, setTeachers] = useState([])
+  const [students, setStudents] = useState([]);
   const [userId, setUserId] = useState('')
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/principal").then((res) => {
+    axios.get("http://localhost:4000/api/principal", {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    }).then((res) => {
 
       setUsers(res.data.data)
+      const onlyStudents = res.data.data.filter(
+        (item) => item.userType === "Student"
+      );
+      setStudents(onlyStudents)
+      console.log(onlyStudents)
+      const onlyTeachers = res.data.data.filter(
+        (item) => item.userType === "Teacher"
+      );
+
+      setTeachers(onlyTeachers)
+      console.log(onlyTeachers)
+
     }).catch((err) => {
       console.log(err)
     })
   }, [])
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/classroom").then((res) => {
+    axios.get("http://localhost:4000/api/classroom", {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    }).then((res) => {
 
       setClassrooms(res.data.data)
     }).catch((err) => {
@@ -34,7 +55,7 @@ function App() {
 
   return (
     <>
-      <MyContext.Provider value={{ users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId, token, setToken }}>
+      <MyContext.Provider value={{ users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId, token, setToken, students, setStudents }}>
 
         <Routes>
           <Route path='/' element={<Login />} />

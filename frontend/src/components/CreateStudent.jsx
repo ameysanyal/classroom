@@ -67,7 +67,7 @@ const CreateStudent = () => {
 
         } catch (error) {
             console.error('Failed to create student:', error);
-            enqueueSnackbar('Failed to create student', { variant: 'error' });
+            enqueueSnackbar('Failed to create Student, User Already Exist', { variant: 'error' });
         }
     };
 

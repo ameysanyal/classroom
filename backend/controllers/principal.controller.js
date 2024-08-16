@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import Classroom from "../models/classroom.model.js";
+import mongoose from "mongoose";
 
 export const createUser = async (req, res) => {
     try {
@@ -64,28 +65,30 @@ export const getUserdetails = async (req, res) => {
 
 export const editUser = async (req, res) => {
     try {
-        const { userType, name, email, password, newClassroom } = req.body;
+        const { userType, name, email, password, classroom } = req.body;
 
-        if (!name || !email || !userType) {
-            return res.status(400).json({
-                message: 'Send all the required fields except password',
-            });
-        }
+
 
         const { id } = req.params;
 
-        // Find the classroom where the student is currently assigned
-        const previousClassroom = await Classroom.findOne({ students: id });
 
-        // Remove the student from the previous classroom if they are assigned to one
+        const previousClassroom = await Classroom.findOne({ students: id });
+        const previousTeacherClassroom = await Classroom.findOne({ teacher: id });
+
         if (previousClassroom) {
             previousClassroom.students.pull(id);
             await previousClassroom.save();
         }
 
-        // If newClassroom is provided, add the student to the new classroom
-        if (newClassroom) {
-            const updateClass = await Classroom.findById(newClassroom);
+
+        if (previousTeacherClassroom) {
+            previousTeacherClassroom.teacher = null
+            await previousTeacherClassroom.save();
+        }
+
+
+        if (classroom && userType === "Student") {
+            const updateClass = await Classroom.findById(classroom);
             if (!updateClass) {
                 return res.status(404).json({ message: "New classroom not found" });
             }
@@ -94,30 +97,41 @@ export const editUser = async (req, res) => {
             const classUpdated = await updateClass.save();
 
             if (!classUpdated) {
-                return res.status(404).json({ message: "Class not Updated" });
+                return res.status(404).json({ message: "Class not updated" });
+            }
+        }
+
+        if (classroom && userType === "Teacher") {
+            const updateClass = await Classroom.findById(classroom);
+            if (!updateClass) {
+                return res.status(404).json({ message: "New classroom not found" });
             }
 
+            updateClass.teacher = id;
+            const classUpdated = await updateClass.save();
+
+            if (!classUpdated) {
+                return res.status(404).json({ message: "Class not updated" });
+            }
         }
 
-        let updateData = {
-            userType, name, email, newClassroom
-        };
 
-        // If password is provided, hash it before saving
-        if (password) {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            updateData.password = hashedPassword;
-        }
-
-        // Update the user with the new data
-        const user = await User.findByIdAndUpdate(id, updateData, { new: true });
-
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        return res.status(200).json({ message: 'User updated successfully', user });
+
+        user.userType = userType;
+        user.name = name;
+        user.email = email;
+        user.classroom = classroom;
+        user.password = password
+
+
+        const updatedUser = await user.save();
+
+        return res.status(200).json({ message: 'User updated successfully', user: updatedUser });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ message: error.message });
@@ -125,53 +139,6 @@ export const editUser = async (req, res) => {
 };
 
 
-// export const editUser = async (req, res) => {
-//     try {
-//         const { userType, name, email, password, newClassroom } = req.body;
-//         if (!name || !email || !password || !userType) {
-//             return res.status(400).json({
-//                 message: 'Send all the required fields',
-//             });
-//         }
-
-//         const { id } = req.params;
-
-//         // Find the classroom where the student is in the students array
-//         const previousClassroom = await Classroom.findOne({ students: id });
-
-//         const index = previousClassroom.students.indexOf(id)
-
-//         const x = previousClassroom.students.splice(index, 1)
-
-//         await previousClassroom.save();
-
-//         const updateClass = await Classroom.findById(newClassroom)
-
-//         updateClass.students.push(id)
-
-//         await updateClass.save()
-
-//         let updateData = {
-//             userType, name, email, newClassroom
-//         }
-
-//         if (password) {
-//             const salt = await bcrypt.genSalt(10);
-//             const hashedPassword = await bcrypt.hash(password, salt);
-//             updateData.password = hashedPassword;
-//         }
-
-//         const user = await User.findByIdAndUpdate(id, updateData, { new: true });
-
-//         if (!user) {
-//             return res.status(404).json({ message: "User not found" });
-//         }
-//         return res.status(200).json({ message: 'User updated successfully', user });
-//     } catch (error) {
-//         console.log(error.message);
-//         return res.status(500).json({ message: error.message });
-//     }
-// };
 
 export const deleteUser = async (req, res) => {
     try {
@@ -188,3 +155,29 @@ export const deleteUser = async (req, res) => {
     }
 };
 
+export const addTeacherClassroom = async (req, res) => {
+
+    console.log(`adding class`)
+    try {
+        const { id } = req.params
+        const { classroomId } = req.body
+        const result = await User.findById(id)
+        if (!classroomId) {
+            return res.status(400).json({ message: "classroomId is required" });
+        }
+
+        if (!result) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        result.classroom = classroomId
+        await result.save();
+
+        return res.status(200).json({ message: 'Succesfully Added Class TeacherClassroom' });
+
+    }
+    catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ message: error.message });
+    }
+}

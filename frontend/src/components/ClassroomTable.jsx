@@ -43,9 +43,9 @@ const ClassroomTable = () => {
                     <tr>
                         <th className='border border-slate-600 rounded-md'>No</th>
                         <th className='border border-slate-600 rounded-md'> Classroom Name</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>Teacher Assigned</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>No. of Students</th>
-                        <th className='border border-slate-600 rounded-md max-md:hidden'>Days</th>
+                        <th className='border border-slate-600 rounded-md'>Teacher Assigned</th>
+                        <th className='border border-slate-600 rounded-md'>No. of Students</th>
+                        <th className='border border-slate-600 rounded-md'>Days</th>
                         <th className='border border-slate-600 rounded-md'>Timing</th>
                         <th className='border border-slate-600 rounded-md'>Operations</th>
                     </tr>
@@ -61,7 +61,7 @@ const ClassroomTable = () => {
                                 {classroom.name}
                             </td>
                             <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                                {classroom.teacher}
+                                {classroom.teacher ? classroom.teacher.name : "None"}
                             </td>
                             <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
                                 {classroom.students.length}

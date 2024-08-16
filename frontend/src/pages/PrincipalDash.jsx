@@ -1,18 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import TeacherTable from '../components/TeacherTable'
 import StudentTable from '../components/StudentTable'
 import ClassroomTable from '../components/ClassroomTable'
 import CreateTeacher from '../components/CreateTeacher'
 import CreateStudent from '../components/CreateStudent'
 import CreateClassroom from '../components/CreateClassroom'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom';
+import { MyContext } from '../MyContext';
 
 
 const PrincipalDash = () => {
-
+    const { teachers, students, classrooms } = useContext(MyContext)
     const navigate = useNavigate()
-
 
     const handleLogout = () => {
         navigate('/')
@@ -23,40 +23,69 @@ const PrincipalDash = () => {
             <div className="w-full lg:w-1/6 bg-gray-800 text-white p-4">
                 <div className="text-2xl font-bold mb-6">ClassRooms</div>
                 <nav>
-                    <button onClick={() => { navigate('teacher-table') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Teachers</button>
+                    <NavLink
+                        to='teacher-table'
+                        className={({ isActive }) => isActive ? "block py-2.5 px-4 w-full text-left rounded bg-gray-700" : "block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700"}
+                    >
+                        Teachers
+                    </NavLink>
 
-                    <button onClick={() => { navigate('student-table') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Students</button>
+                    <NavLink
+                        to='student-table'
+                        className={({ isActive }) => isActive ? "block py-2.5 px-4 w-full text-left rounded bg-gray-700" : "block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700"}
+                    >
+                        Students
+                    </NavLink>
 
-                    <button onClick={() => { navigate('classroom-table') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Classrooms</button>
+                    <NavLink
+                        to='classroom-table'
+                        className={({ isActive }) => isActive ? "block py-2.5 px-4 w-full text-left rounded bg-gray-700" : "block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700"}
+                    >
+                        Classrooms
+                    </NavLink>
 
-                    <button onClick={() => { navigate('create-teacher') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Add Teachers</button>
-                    <button onClick={() => { navigate('create-student') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Add Students</button>
-                    <button onClick={() => { navigate('create-classroom') }} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Add Classrooms</button>
+                    <NavLink
+                        to='create-teacher'
+                        className={({ isActive }) => isActive ? "block py-2.5 px-4 w-full text-left rounded bg-gray-700" : "block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700"}
+                    >
+                        Add Teachers
+                    </NavLink>
+
+                    <NavLink
+                        to='create-student'
+                        className={({ isActive }) => isActive ? "block py-2.5 px-4 w-full text-left rounded bg-gray-700" : "block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700"}
+                    >
+                        Add Students
+                    </NavLink>
+
+                    <NavLink
+                        to='create-classroom'
+                        className={({ isActive }) => isActive ? "block py-2.5 px-4 w-full text-left rounded bg-gray-700" : "block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700"}
+                    >
+                        Add Classrooms
+                    </NavLink>
+
                     <button onClick={handleLogout} className="block py-2.5 px-4 w-full text-left rounded hover:bg-gray-700">Logout</button>
                 </nav>
             </div>
 
             <div className="flex-1 p-6">
-                <header className="flex justify-between items-center mb-6">
+                <header className="flex mb-6">
                     <h1 className="text-xl font-semibold">Admin <br />Dashboard</h1>
-                    <h1 className="text-xl font-semibold">Welcome, Principal</h1>
-                    <div className='flex justify-end'>
-                        <button className="bg-blue-600 text-white px-2 py-1 m-1 rounded hover:bg-blue-500">Add New User</button>
-                        <button className="bg-blue-600 text-white px-2 py-1 m-1 rounded hover:bg-blue-500">Add New Classroom</button>
-                    </div>
+
+                    <h1 className="text-xl font-semibold flex-grow text-center">Welcome, Principal</h1>
+
                 </header>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
                     <div className="bg-white flex justify-center items-center p-4 h-full rounded shadow">
-                        <p className="text-xl font-bold">Total Teachers: 500</p>
+                        <p className="text-xl font-bold">Total Teachers: {teachers.length}</p>
                     </div>
                     <div className="bg-white flex justify-center items-center p-4 h-full rounded shadow">
-                        <p className="text-xl font-bold">Total Students: 500</p>
+                        <p className="text-xl font-bold">Total Students: {students.length}</p>
                     </div>
-
                     <div className="bg-white flex justify-center items-center p-4 h-full rounded shadow">
-                        <p className="text-xl font-bold">Total Classrooms: 500</p>
+                        <p className="text-xl font-bold">Total Classrooms: {classrooms.length}</p>
                     </div>
                 </div>
 
@@ -69,19 +98,10 @@ const PrincipalDash = () => {
                     <Route path='create-classroom' element={<CreateClassroom />} />
                     <Route path="*" element={<TeacherTable />} />
                 </Routes>
-
-
             </div>
         </div>
-
     )
 }
 
 export default PrincipalDash
 
-
-// { display.teacher && <TeacherTable /> }
-// { display.student && <StudentTable /> }
-// { display.classroom && <ClassroomTable /> }
-// { addUser && <CreateTeacher userArray={userArray} /> }
-// { addClassroom && <CreateClassroom onClose={() => setAddClassroom(false)} /> }

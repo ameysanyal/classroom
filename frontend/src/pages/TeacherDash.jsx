@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { MyContext } from '../MyContext';
 import StudentTable from '../components/StudentTable'
-import CreateUser from '../components/CreateUser'
+
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 const TeacherDash = () => {

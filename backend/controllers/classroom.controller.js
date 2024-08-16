@@ -30,7 +30,7 @@ export const createClassroom = async (req, res) => {
 
 export const getClassrooms = async (req, res) => {
     try {
-        const classrooms = await Classroom.find({}).populate("teacher").populate("students");;
+        const classrooms = await Classroom.find({}).populate("teacher").populate("students");
         return res.status(200).json({
             count: classrooms.length,
             data: classrooms,
@@ -44,7 +44,7 @@ export const getClassrooms = async (req, res) => {
 // Get classroom details
 export const getClassroom = async (req, res) => {
     try {
-        const classroom = await Classroom.findById(req.params.id).populate("students");
+        const classroom = await Classroom.findById(req.params.id).populate("teacher").populate("students")
         if (!classroom) {
             return res.status(404).json({ message: "Classroom not found" });
         }

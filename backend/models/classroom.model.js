@@ -7,7 +7,8 @@ const classroomSchema = new mongoose.Schema(
             required: true,
         },
         teacher: {
-            type: String
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
         },
         students: [
             {
