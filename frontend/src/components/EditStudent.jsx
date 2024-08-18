@@ -66,7 +66,7 @@ const EditStudent = ({ onClose, indexid }) => {
                 enqueueSnackbar('Details Updated Successfully', { variant: 'success' });
             }).catch((error) => {
                 console.log(error)
-                enqueueSnackbar('Failed to Update Details', { variant: 'error' });
+                enqueueSnackbar('Failed to Update Details, check user already exist or not', { variant: 'error' });
             })
     }
 

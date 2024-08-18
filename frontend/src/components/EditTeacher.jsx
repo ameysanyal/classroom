@@ -4,21 +4,21 @@ import { MdOutlineClose } from "react-icons/md"
 import { MyContext } from '../MyContext';
 import { useSnackbar } from 'notistack';
 
-const EditTeacher = ({ onClose, indexid }) => {
+const EditTeacher = ({ onClose, indexId }) => {
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [classroom, setClassroom] = useState('');
+
     const [password, setPassword] = useState('')
     const [userType, setUserType] = useState('')
-    const { users, setUsers, token, classrooms } = useContext(MyContext)
+    const { users, setUsers, token } = useContext(MyContext)
 
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
 
 
-        axios.get(`http://localhost:4000/api/principal/${indexid}`, {
+        axios.get(`http://localhost:4000/api/principal/${indexId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -28,7 +28,7 @@ const EditTeacher = ({ onClose, indexid }) => {
                 setName(response.data.name);
                 setEmail(response.data.email)
                 setPassword(response.data.password)
-                setClassroom(response.data.classroom)
+
 
 
             }).catch((error) => {
@@ -45,36 +45,30 @@ const EditTeacher = ({ onClose, indexid }) => {
             name,
             email,
             password,
-            classroom
+
         };
 
         console.log(data)
-        axios.put(`http://localhost:4000/api/principal/${indexid}`, data, {
+        axios.put(`http://localhost:4000/api/principal/${indexId}`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
         })
-            .then(async (res) => {
+            .then((res) => {
                 const update = users.map((item) => {
-                    if (item._id === indexid) {
+                    if (item._id === indexId) {
                         return { ...data };
                     }
                     return item
                 })
                 setUsers(update)
 
-                // await axios.patch(`http://localhost:4000/api/principal/${indexid}`, { classroom }, {
-                //     headers: {
-                //         Authorization: `Bearer ${token}`,
-                //     },
-                // });
-
                 console.log(res)
                 onClose()
                 enqueueSnackbar('Details Updated Successfully', { variant: 'success' });
             }).catch((error) => {
                 console.log(error)
-                enqueueSnackbar('Failed to Update Details', { variant: 'error' });
+                enqueueSnackbar('Failed to Update Details,check user already exist or not', { variant: 'error' });
             })
     }
 
@@ -113,17 +107,6 @@ const EditTeacher = ({ onClose, indexid }) => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className='border-2 border-gray-500 p-1 w-full'
                             />
-                        </div>
-                        <div className='my-2'>
-                            <label className='text-xl mr-4 text-white' htmlFor="teacher">Assign Class to Teacher</label>
-                            <select
-                                value={classroom}
-                                onChange={(e) => setClassroom(e.target.value)}
-                                className='border-2 border-gray-500 p-1 w-1/3' name="classroom" id="classroom">
-                                <option>Select Class</option>
-
-                                {classrooms.filter((cl) => { return cl.teacher == null }).map((na, i) => <option key={i} value={na._id}>{na.name}</option>)}
-                            </select>
                         </div>
                         <button className='p-2 bg-sky-300 m-2 w-1/2 self-center' onClick={handleEditTeacher}>
                             Save

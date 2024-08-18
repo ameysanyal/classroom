@@ -102,3 +102,38 @@ export const deleteAllClassrooms = async (req, res) => {
         res.status(500).send({ message: error.message });
     }
 }
+
+export const editClassroom = async (req, res) => {
+
+    try {
+        const { name, startDay, endDay, startTime, endTime } = req.body
+        const { id } = req.params;
+
+        // Ensure all required fields for the schedule are provided
+        if (!startDay || !endDay || !startTime || !endTime) {
+            return res.status(400).json({ message: 'All schedule fields (startDay, endDay, startTime, endTime) are required.' });
+        }
+
+        const result = await Classroom.findById(id)
+
+        if (!result) {
+            return res.status(404).json({ message: 'Classroom not found' });
+        }
+        console.log(result)
+        result.name = name
+
+        result.schedule = [{
+            startDay, endDay, startTime, endTime
+        }]
+
+        const updatedClassroom = await result.save()
+        return res.status(200).json({ message: 'Classroom updated successfully', classroom: updatedClassroom });
+    }
+    catch (error) {
+        console.error(error.message);
+        res.status(500).send({ message: error.message });
+    }
+
+}
+
+

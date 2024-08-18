@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack'
 const TeacherTable = () => {
 
     const [edit, setEdit] = useState(false)
-    const [indexid, setIndexId] = useState()
+    const [indexId, setIndexId] = useState()
     const { users, setUsers, token } = useContext(MyContext)
     const { teachers, setTeachers } = useContext(MyContext)
     const { enqueueSnackbar } = useSnackbar();
@@ -50,55 +50,57 @@ const TeacherTable = () => {
 
     return (
         <>
-            <table className='w-full border-separate border-spacing-2 p-1'>
-                <thead>
-                    <tr>
-                        <th className='border border-slate-600 rounded-md'>No</th>
-                        <th className='border border-slate-600 rounded-md'> Teacher Name</th>
-                        <th className='border border-slate-600 rounded-md'>Class Assigned</th>
-                        <th className='border border-slate-600 rounded-md'>Email</th>
-                        <th className='border border-slate-600 rounded-md'>Password</th>
-                        <th className='border border-slate-600 rounded-md'>Operations</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {teachers.map((teacher, index) => (
-                        <tr key={teacher._id} className='h-8'>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {index + 1}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {teacher.name}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {teacher.classroom ? teacher.classroom.name : "None"}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {teacher.email}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                {teacher.password}
-                            </td>
-                            <td className='border border-slate-700 rounded-md text-center'>
-                                <div className='flex justify-center gap-x-4'>
-
-
-
-                                    <AiOutlineEdit title="edit" className='cursor-pointer text-2xl text-yellow-800' onClick={() => { setEdit(true); setIndexId(teacher._id) }} />
-
-                                    <MdOutlineDelete title="delete" className='cursor-pointer text-2xl text-red-800' onClick={() => { handleDeleteUser(teacher._id) }} />
-
-                                </div>
-
-                            </td>
+            <div className='overflow-y-auto h-128'>
+                <table className='w-full border-separate border-spacing-2 p-1'>
+                    <thead>
+                        <tr>
+                            <th className='border border-slate-600 rounded-md'>No</th>
+                            <th className='border border-slate-600 rounded-md'> Teacher Name</th>
+                            <th className='border border-slate-600 rounded-md'>Class Assigned</th>
+                            <th className='border border-slate-600 rounded-md'>Email</th>
+                            <th className='border border-slate-600 rounded-md'>Password</th>
+                            <th className='border border-slate-600 rounded-md'>Operations</th>
                         </tr>
-                    ))
-                    }
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
-            {edit && <EditTeacher indexid={indexid} onClose={() => setEdit(false)} />}
+                        {teachers.map((teacher, index) => (
+                            <tr key={teacher._id} className='h-8'>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    {index + 1}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    {teacher.name}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    {teacher.classroom ? teacher.classroom.name : "None"}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    {teacher.email}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center break-all'>
+                                    {teacher.password}
+                                </td>
+                                <td className='border border-slate-700 rounded-md text-center'>
+                                    <div className='flex justify-center gap-x-4'>
+
+
+
+                                        <AiOutlineEdit title="edit" className='cursor-pointer text-2xl text-yellow-800' onClick={() => { setEdit(true); setIndexId(teacher._id) }} />
+
+                                        <MdOutlineDelete title="delete" className='cursor-pointer text-2xl text-red-800' onClick={() => { handleDeleteUser(teacher._id) }} />
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        ))
+                        }
+
+                    </tbody>
+                </table>
+                {edit && <EditTeacher indexId={indexId} onClose={() => setEdit(false)} />}
+            </div>
         </>
 
     )

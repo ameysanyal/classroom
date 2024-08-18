@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MyContext } from "../MyContext";
 import { AiOutlineEdit } from "react-icons/ai";
-// import { BsInfoCircle } from 'react-icons/bs';
 import { MdOutlineDelete } from "react-icons/md";
 import EditStudent from "./EditStudent";
 import axios from "axios";
 import { useSnackbar } from 'notistack'
 
 const StudentTable = () => {
-
     const [edit, setEdit] = useState(false);
     const [indexid, setIndexId] = useState();
     const { users, setUsers, token, students, setStudents } = useContext(MyContext);
@@ -82,15 +80,14 @@ const StudentTable = () => {
                                 <td className="border border-slate-700 rounded-md text-center">
                                     {student.classroom ? student.classroom.name : 'None'}
                                 </td>
-                                <td className="border border-slate-700 rounded-md text-center max-md:hidden">
+                                <td className="border border-slate-700 rounded-md text-center">
                                     {student.email}
                                 </td>
-                                <td className="border border-slate-700 rounded-md text-center max-md:hidden">
+                                <td className="border border-slate-700 rounded-md text-center break-all">
                                     {student.password}
                                 </td>
-                                <td className="border border-slate-700 rounded-md text-center max-md:hidden">
+                                <td className="border border-slate-700 rounded-md text-center">
                                     <div className="flex justify-center gap-x-4">
-                                        {/* <BsInfoCircle title="info" className='cursor-pointer text-2xl text-green-800' /> */}
 
                                         <AiOutlineEdit
                                             title="edit"

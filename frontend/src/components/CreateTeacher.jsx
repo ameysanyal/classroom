@@ -39,7 +39,7 @@ const CreateTeacher = () => {
 
         } catch (error) {
             console.error(error);
-            enqueueSnackbar('Failed to create teacher', { variant: 'error' });
+            enqueueSnackbar('Failed to create teacher, check user already exist or not', { variant: 'error' });
         }
     };
 

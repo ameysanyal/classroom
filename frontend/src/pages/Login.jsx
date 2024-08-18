@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from '../MyContext';
 import axios from 'axios'
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { setUserId, token, setToken } = useContext(MyContext)
+    const { userId, setUserId, token, setToken } = useContext(MyContext)
     const navigate = useNavigate()
 
     const bg = {
@@ -17,6 +17,7 @@ const Login = () => {
         backgroundRepeat: "no-repeat",
     };
 
+
     const validateCredentials = (e) => {
         e.preventDefault();
         const data = {
@@ -26,10 +27,11 @@ const Login = () => {
         axios.post('http://localhost:4000/api/login', data).then((res) => {
 
             setToken(res.data.token)
-            localStorage.setItem('authToken', token);
+            localStorage.setItem('authToken', res.data.token);
             localStorage.getItem('authToken');
-            console.log(token)
+            console.log(res.data.userId)
             setUserId(res.data.userId)
+
 
             // Setting up the Authorization header for future requests
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -38,10 +40,10 @@ const Login = () => {
                 navigate("/principal-dashboard");
             }
             else if (res.data.userType === "Teacher") {
-                navigate("/teacher-dashboard");
+                navigate(`/teacher-dashboard/${res.data.userId}/*`);
             }
             else if (res.data.userType === "Student") {
-                navigate("/student-dashboard");
+                navigate(`/student-dashboard/${res.data.userId}/*`);
             }
 
 

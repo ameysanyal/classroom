@@ -38,7 +38,13 @@ export const createUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     try {
-        const users = await User.find({}).populate("classroom").exec();
+        const users = await User.find({}).populate({
+            path: 'classroom',
+            populate: {
+                path: 'students', // Populate the students array
+                model: 'User', // Assuming the students are also stored in the User model
+            },
+        });
         return res.status(200).json({
             count: users.length,
             data: users,
@@ -66,26 +72,16 @@ export const getUserdetails = async (req, res) => {
 export const editUser = async (req, res) => {
     try {
         const { userType, name, email, password, classroom } = req.body;
-
-
-
+        // console.log(classroom)
         const { id } = req.params;
 
-
         const previousClassroom = await Classroom.findOne({ students: id });
-        const previousTeacherClassroom = await Classroom.findOne({ teacher: id });
+
 
         if (previousClassroom) {
             previousClassroom.students.pull(id);
             await previousClassroom.save();
         }
-
-
-        if (previousTeacherClassroom) {
-            previousTeacherClassroom.teacher = null
-            await previousTeacherClassroom.save();
-        }
-
 
         if (classroom && userType === "Student") {
             const updateClass = await Classroom.findById(classroom);
@@ -94,20 +90,6 @@ export const editUser = async (req, res) => {
             }
 
             updateClass.students.push(id);
-            const classUpdated = await updateClass.save();
-
-            if (!classUpdated) {
-                return res.status(404).json({ message: "Class not updated" });
-            }
-        }
-
-        if (classroom && userType === "Teacher") {
-            const updateClass = await Classroom.findById(classroom);
-            if (!updateClass) {
-                return res.status(404).json({ message: "New classroom not found" });
-            }
-
-            updateClass.teacher = id;
             const classUpdated = await updateClass.save();
 
             if (!classUpdated) {
@@ -125,7 +107,9 @@ export const editUser = async (req, res) => {
         user.userType = userType;
         user.name = name;
         user.email = email;
-        user.classroom = classroom;
+        if (classroom) {
+            user.classroom = classroom;
+        }
         user.password = password
 
 

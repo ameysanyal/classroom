@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import TeacherTable from '../components/TeacherTable'
 import StudentTable from '../components/StudentTable'
 import ClassroomTable from '../components/ClassroomTable'
@@ -11,12 +11,25 @@ import { MyContext } from '../MyContext';
 
 
 const PrincipalDash = () => {
-    const { teachers, students, classrooms } = useContext(MyContext)
+    const { users, setUsers, teachers, students, classrooms, setTeachers, setStudents, setClassrooms, setUserId, setToken } = useContext(MyContext)
     const navigate = useNavigate()
 
     const handleLogout = () => {
+        setUserId('')
+        setToken('')
+        localStorage.removeItem('authToken');
         navigate('/')
+
     }
+
+    useEffect(() => {
+        console.log(`in effect of pdash`)
+        setUsers(users)
+        setTeachers(teachers)
+        setStudents(students)
+        setClassrooms(classrooms)
+
+    }, [teachers, students, classrooms])
 
     return (
         <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">

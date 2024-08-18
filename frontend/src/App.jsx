@@ -14,8 +14,13 @@ function App() {
   const [teachers, setTeachers] = useState([])
   const [students, setStudents] = useState([]);
   const [userId, setUserId] = useState('')
+  const [classStudents, setClassStudents] = useState([])
+
 
   useEffect(() => {
+
+    // console.log(token)
+
     axios.get("http://localhost:4000/api/principal", {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -27,13 +32,11 @@ function App() {
         (item) => item.userType === "Student"
       );
       setStudents(onlyStudents)
-      console.log(onlyStudents)
       const onlyTeachers = res.data.data.filter(
         (item) => item.userType === "Teacher"
       );
 
       setTeachers(onlyTeachers)
-      console.log(onlyTeachers)
 
     }).catch((err) => {
       console.log(err)
@@ -53,15 +56,25 @@ function App() {
     })
   }, [])
 
+
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem('authToken');
+  //   if (storedToken && storedToken !== token) {
+  //     setToken(storedToken);
+  //   }
+  // }, []);
+
+
   return (
     <>
-      <MyContext.Provider value={{ users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId, token, setToken, students, setStudents }}>
+      <MyContext.Provider value={{ users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId, token, setToken, students, setStudents, classStudents, setClassStudents }}>
 
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path="/principal-dashboard/*" element={<PrincipalDash />} />
-          <Route path='/teacher-dashboard' element={<TeacherDash userId={userId} />} />
-          <Route path='/student-dashboard' element={<StudentDash userId={userId} />} />
+          <Route path='/teacher-dashboard/:userId/*' element={<TeacherDash />} />
+
+          <Route path='/student-dashboard/:userId/*' element={<StudentDash userId={userId} />} />
         </Routes>
 
 

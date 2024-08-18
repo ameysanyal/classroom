@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { MyContext } from '../MyContext';
 import { useSnackbar } from 'notistack';
+import ClassStudents from './ClassStudents';
 
 const CreateStudent = () => {
     const [name, setName] = useState('');
@@ -57,7 +58,8 @@ const CreateStudent = () => {
             const updatedUsers = [...users, response.data];
             setUsers(updatedUsers);
 
-            // Clear form fields
+
+
             setName('');
             setEmail('');
             setPassword('');
@@ -67,7 +69,7 @@ const CreateStudent = () => {
 
         } catch (error) {
             console.error('Failed to create student:', error);
-            enqueueSnackbar('Failed to create Student, User Already Exist', { variant: 'error' });
+            enqueueSnackbar('Failed to create Student, check user already exist or not', { variant: 'error' });
         }
     };
 
