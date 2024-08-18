@@ -8,12 +8,14 @@ import { MyContext } from '../MyContext';
 import ClassStudents from '../components/ClassStudents'
 import { useParams } from 'react-router-dom';
 import ClassDetails from '../components/ClassDetails'
+
+
 const TeacherDash = () => {
 
-    const { setUserId, token, setToken } = useContext(MyContext)
+    const { backendUrl, setUserId, token, setToken } = useContext(MyContext)
     const { userId } = useParams();
 
-    const [teacherId, setTeacherId] = useState(userId)
+
     const [userName, setUserName] = useState('')
     const [loginTeacher, setLoginTeacher] = useState()
 
@@ -28,10 +30,7 @@ const TeacherDash = () => {
 
     useEffect(() => {
 
-        setTeacherId(userId)
-        console.log(`teacherID = ${teacherId}`)
-
-        axios.get(`http://localhost:4000/api/principal/${userId}`, {
+        axios.get(`${backendUrl}/api/principal/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -41,8 +40,6 @@ const TeacherDash = () => {
             setCurrentTeacherStudents(res.data.classroom.students)
 
             console.log(`teacherstudents = ${currentTeacherStudents}`)
-
-            // console.log(`userName = ${userName}`)
 
         }).catch((err) => {
             console.log(err)

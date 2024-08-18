@@ -11,12 +11,12 @@ const TeacherTable = () => {
     const [edit, setEdit] = useState(false)
     const [indexId, setIndexId] = useState()
     const { users, setUsers, token } = useContext(MyContext)
-    const { teachers, setTeachers } = useContext(MyContext)
+    const { backendUrl, teachers, setTeachers } = useContext(MyContext)
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        // console.log(`teacker table ${token}`)
-        axios.get("http://localhost:4000/api/principal", {
+
+        axios.get(`${backendUrl}/api/principal`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -32,7 +32,7 @@ const TeacherTable = () => {
 
     const handleDeleteUser = (id) => {
 
-        axios.delete(`http://localhost:4000/api/principal/${id}`, {
+        axios.delete(`${backendUrl}/api/principal/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }

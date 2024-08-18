@@ -6,7 +6,7 @@ import CreateTeacher from '../components/CreateTeacher'
 import CreateStudent from '../components/CreateStudent'
 import CreateClassroom from '../components/CreateClassroom'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { MyContext } from '../MyContext';
 
 
@@ -23,7 +23,7 @@ const PrincipalDash = () => {
     }
 
     useEffect(() => {
-        console.log(`in effect of pdash`)
+
         setUsers(users)
         setTeachers(teachers)
         setStudents(students)
@@ -103,6 +103,7 @@ const PrincipalDash = () => {
                 </div>
 
                 <Routes>
+                    <Route path="/" element={<Navigate to="teacher-table" />} />
                     <Route path='teacher-table' element={<TeacherTable />} />
                     <Route path='student-table' element={<StudentTable />} />
                     <Route path='classroom-table' element={<ClassroomTable />} />

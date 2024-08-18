@@ -3,15 +3,14 @@ import axios from 'axios'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom';
 import { MyContext } from '../MyContext';
-
 import ClassMates from '../components/ClassMates'
 import { useParams } from 'react-router-dom';
 import ClassDetails from '../components/ClassDetails'
 const StudentDash = () => {
 
-    const { setUserId, token, setToken } = useContext(MyContext)
+    const { backendUrl, setUserId, token, setToken } = useContext(MyContext)
     const { userId } = useParams();
-    const [studentId, setStudentId] = useState(userId)
+
     const [userName, setUserName] = useState('')
     const [loginStudent, setLoginStudent] = useState()
     const navigate = useNavigate()
@@ -24,23 +23,20 @@ const StudentDash = () => {
     }
 
     useEffect(() => {
-        setStudentId(userId)
-        console.log(`teacherID = ${studentId}`)
-        axios.get(`http://localhost:4000/api/principal/${userId}`, {
+        axios.get(`${backendUrl}/api/principal/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
         }).then((res) => {
             setUserName(res.data.name)
             setLoginStudent(res.data)
-            // console.log(`userName = ${userName}`)
+
 
         }).catch((err) => {
             console.log(err)
         })
 
-    }, [userName])
-
+    }, [])
 
     return (
         <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
@@ -75,7 +71,7 @@ const StudentDash = () => {
                 <Routes>
 
                     <Route path='class-mates' element={<ClassMates userName={userName} />} />
-                    <Route path='class-details' element={<ClassDetails loggedIn={loginStudent} />} />
+                    <Route path='class-details' element={<ClassDetails loggedIn={loginStudent && loginStudent} />} />
 
                     <Route path="*" element={<ClassMates userName={userName} />} />
 

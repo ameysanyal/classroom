@@ -16,7 +16,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
     const [edit, setEdit] = useState(false);
     const [indexid, setIndexId] = useState();
 
-    const { classStudents, setClassStudents, teachers, users, setUsers, token, setStudents } = useContext(MyContext);
+    const { backendUrl, classStudents, setClassStudents, teachers, users, setUsers, token, setStudents } = useContext(MyContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const updateClassStudents = async () => {
@@ -30,7 +30,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
 
         if (loggedIn && loggedIn.classroom && loggedIn.classroom._id) {
             try {
-                const response = await axios.get(`http://localhost:4000/api/classroom/${loggedIn.classroom._id}`, {
+                const response = await axios.get(`${backendUrl}/api/classroom/${loggedIn.classroom._id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -47,7 +47,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
     }, [teachers, userName]); // Only run when teachers or userName changes
 
     useEffect(() => {
-        axios.get("http://localhost:4000/api/principal", {
+        axios.get(`${backendUrl}/api/principal`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -64,7 +64,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
     }, [token]); // Fetch only once when the component mounts
 
     const handleDeleteUser = (id) => {
-        axios.delete(`http://localhost:4000/api/principal/${id}`, {
+        axios.delete(`${backendUrl}/api/principal/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }

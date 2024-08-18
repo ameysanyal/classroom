@@ -4,13 +4,16 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { AiOutlineEdit } from 'react-icons/ai';
 import axios from 'axios';
 import EditClassroom from './EditClassroom';
+import { useSnackbar } from 'notistack';
+
 const ClassroomTable = () => {
-    const { classrooms, setClassrooms, token } = useContext(MyContext)
+    const { backendUrl, classrooms, setClassrooms, token } = useContext(MyContext)
     const [edit, setEdit] = useState(false)
     const [indexId, setIndexId] = useState()
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        axios.get("http://localhost:4000/api/classroom", {
+        axios.get(`${backendUrl}/api/classroom`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -25,7 +28,7 @@ const ClassroomTable = () => {
     }, [])
 
     const handleDeleteClassroom = (id) => {
-        axios.delete(`http://localhost:4000/api/classroom/${id}`,
+        axios.delete(`${backendUrl}/api/classroom/${id}`,
             {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -34,9 +37,12 @@ const ClassroomTable = () => {
         )
             .then(() => {
                 setClassrooms(classrooms.filter(classroom => classroom._id !== id));
+                enqueueSnackbar('Deleted Classroom Successfully', { variant: 'success' });
             })
             .catch(err => {
                 console.error(err);
+                enqueueSnackbar('Failed to delete Classroom', { variant: 'error' });
+
             });
     };
 
@@ -66,13 +72,13 @@ const ClassroomTable = () => {
                                 <td className='border border-slate-700 rounded-md text-center'>
                                     {classroom.name}
                                 </td>
-                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                <td className='border border-slate-700 rounded-md text-center'>
                                     {classroom.teacher ? classroom.teacher.name : "None"}
                                 </td>
-                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                <td className='border border-slate-700 rounded-md text-center'>
                                     {classroom.students.length}
                                 </td>
-                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                <td className='border border-slate-700 rounded-md text-center'>
                                     {/* {classroom.schedule?.startDay} to {classroom.schedule?.endDay} this is not valid */}
                                     {classroom.schedule.map((scheduleItem, i) => (
                                         <div key={i}>
@@ -81,14 +87,14 @@ const ClassroomTable = () => {
                                     ))}
 
                                 </td>
-                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                <td className='border border-slate-700 rounded-md text-center'>
                                     {classroom.schedule.map((scheduleItem, i) => (
                                         <div key={i}>
                                             {scheduleItem.startTime} to {scheduleItem.endTime}
                                         </div>
                                     ))}
                                 </td>
-                                <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
+                                <td className='border border-slate-700 rounded-md text-center'>
                                     <div className='flex justify-center gap-x-4'>
                                         <AiOutlineEdit title="edit" className='cursor-pointer text-2xl text-yellow-800' onClick={() => { setEdit(true); setIndexId(classroom._id) }} />
 

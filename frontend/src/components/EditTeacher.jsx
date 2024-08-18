@@ -11,14 +11,13 @@ const EditTeacher = ({ onClose, indexId }) => {
 
     const [password, setPassword] = useState('')
     const [userType, setUserType] = useState('')
-    const { users, setUsers, token } = useContext(MyContext)
+    const { backendUrl, users, setUsers, token } = useContext(MyContext)
 
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
 
-
-        axios.get(`http://localhost:4000/api/principal/${indexId}`, {
+        axios.get(`${backendUrl}/api/principal/${indexId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -28,7 +27,6 @@ const EditTeacher = ({ onClose, indexId }) => {
                 setName(response.data.name);
                 setEmail(response.data.email)
                 setPassword(response.data.password)
-
 
 
             }).catch((error) => {
@@ -48,8 +46,8 @@ const EditTeacher = ({ onClose, indexId }) => {
 
         };
 
-        console.log(data)
-        axios.put(`http://localhost:4000/api/principal/${indexId}`, data, {
+
+        axios.put(`${backendUrl}/api/principal/${indexId}`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -63,7 +61,6 @@ const EditTeacher = ({ onClose, indexId }) => {
                 })
                 setUsers(update)
 
-                console.log(res)
                 onClose()
                 enqueueSnackbar('Details Updated Successfully', { variant: 'success' });
             }).catch((error) => {

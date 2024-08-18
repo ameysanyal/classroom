@@ -8,7 +8,7 @@ const CreateTeacher = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { users, setUsers, token } = useContext(MyContext)
+    const { backendUrl, users, setUsers, token, teachers, setTeachers } = useContext(MyContext)
     const { enqueueSnackbar } = useSnackbar();
 
 
@@ -23,7 +23,7 @@ const CreateTeacher = () => {
 
         try {
 
-            const response = await axios.post('http://localhost:4000/api/principal', data, {
+            const response = await axios.post(`${backendUrl}/api/principal`, data, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -32,6 +32,8 @@ const CreateTeacher = () => {
             console.log(response);
             const updated = [...users, response.data];
             setUsers(updated);
+            const updatedTeachers = [...teachers, response.data]
+            setTeachers(updatedTeachers)
             setName('')
             setEmail('')
             setPassword('')

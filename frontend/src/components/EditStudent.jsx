@@ -11,13 +11,13 @@ const EditStudent = ({ onClose, indexid }) => {
     const [classroom, setClassroom] = useState('');
     const [password, setPassword] = useState('')
     const [userType, setUserType] = useState('')
-    const { users, setUsers, token, classrooms } = useContext(MyContext)
+    const { backendUrl, users, setUsers, token, classrooms } = useContext(MyContext)
 
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
 
-        axios.get(`http://localhost:4000/api/principal/${indexid}`, {
+        axios.get(`${backendUrl}/api/principal/${indexid}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -29,10 +29,9 @@ const EditStudent = ({ onClose, indexid }) => {
                 setPassword(response.data.password)
                 setClassroom(response.data.classroom)
 
-
             }).catch((error) => {
 
-                alert('An error happend, Please check console');
+
                 console.log(error)
             })
     }, [])
@@ -48,7 +47,7 @@ const EditStudent = ({ onClose, indexid }) => {
         };
 
         console.log(data)
-        axios.put(`http://localhost:4000/api/principal/${indexid}`, data, {
+        axios.put(`${backendUrl}/api/principal/${indexid}`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }

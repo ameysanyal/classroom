@@ -17,12 +17,12 @@ const EditClassroom = ({ onClose, indexId }) => {
     const [startDay, setStartDay] = useState('')
     const [classTeacher, setClasTeacher] = useState()
     const [endDay, setEndDay] = useState('')
-    const { token, classrooms, setClassrooms } = useContext(MyContext)
+    const { backendUrl, token, classrooms, setClassrooms } = useContext(MyContext)
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        console.log(indexId)
-        axios.get(`http://localhost:4000/api/classroom/${indexId}`, {
+
+        axios.get(`${backendUrl}/api/classroom/${indexId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }
@@ -30,7 +30,7 @@ const EditClassroom = ({ onClose, indexId }) => {
 
             setClasTeacher(response.data.teacher)
             setName(response.data.name)
-            console.log(response.data.name)
+
         }).catch((error) => {
 
             console.log(error)
@@ -47,7 +47,7 @@ const EditClassroom = ({ onClose, indexId }) => {
             endTime
         }
 
-        axios.put(`http://localhost:4000/api/classroom/${indexId}`, data, {
+        axios.put(`${backendUrl}/api/classroom/${indexId}`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
             }

@@ -11,7 +11,7 @@ const CreateClassroom = () => {
 
     const days = ["Select Day", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     const { enqueueSnackbar } = useSnackbar();
-    const { teachers, classrooms, setClassrooms, token } = useContext(MyContext)
+    const { backendUrl, teachers, classrooms, setClassrooms, token } = useContext(MyContext)
     const [teacher, setTeacher] = useState('')
     const [notAssigned, setNotAssigned] = useState([])
 
@@ -40,24 +40,24 @@ const CreateClassroom = () => {
                 }
             ]
         };
-        console.table(data)
-        axios.post('http://localhost:4000/api/classroom', data, {
+        // console.table(data)
+        axios.post(`${backendUrl}/api/classroom`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         })
             .then(async (res) => {
-                // console.log(` new class id${res.data._id}`)
+
                 const updated = [...classrooms, res.data]
                 setClassrooms(updated)
 
-                await axios.patch(`http://localhost:4000/api/principal/${teacher}`, { classroomId: res.data._id }, {
+                await axios.patch(`${backendUrl}/api/principal/${teacher}`, { classroomId: res.data._id }, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                axios.get("http://localhost:4000/api/classroom", {
+                axios.get(`${backendUrl}/api/classroom`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     }
@@ -83,7 +83,7 @@ const CreateClassroom = () => {
 
             }).catch((error) => {
                 console.log(error);
-                enqueueSnackbar('Failed to create Classroom', { variant: 'error' });
+                enqueueSnackbar('Failed to create Classroom, Teacher is Required', { variant: 'error' });
             })
     }
 

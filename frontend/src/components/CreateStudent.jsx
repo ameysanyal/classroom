@@ -2,14 +2,13 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { MyContext } from '../MyContext';
 import { useSnackbar } from 'notistack';
-import ClassStudents from './ClassStudents';
 
 const CreateStudent = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [classroom, setClassroom] = useState('');
-    const { users, setUsers, token, classrooms } = useContext(MyContext);
+    const { backendUrl, users, setUsers, token, classrooms, students, setStudents } = useContext(MyContext);
     const { enqueueSnackbar } = useSnackbar();
 
     const handleSaveUser = async () => {
@@ -29,7 +28,7 @@ const CreateStudent = () => {
         console.table(data);
 
         try {
-            const response = await axios.post('http://localhost:4000/api/principal', data, {
+            const response = await axios.post(`${backendUrl}/api/principal`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -39,7 +38,7 @@ const CreateStudent = () => {
 
             // Patch the classroom with the new student ID
             try {
-                await axios.patch(`http://localhost:4000/api/classroom/${classroom}`, { studentId: response.data.userId }, {
+                await axios.patch(`${backendUrl}/api/classroom/${classroom}`, { studentId: response.data.userId }, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -58,7 +57,8 @@ const CreateStudent = () => {
             const updatedUsers = [...users, response.data];
             setUsers(updatedUsers);
 
-
+            const updatedStudents = [...students, response.data]
+            setStudents(updatedStudents)
 
             setName('');
             setEmail('');

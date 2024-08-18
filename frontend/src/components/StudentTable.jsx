@@ -9,12 +9,12 @@ import { useSnackbar } from 'notistack'
 const StudentTable = () => {
     const [edit, setEdit] = useState(false);
     const [indexid, setIndexId] = useState();
-    const { users, setUsers, token, students, setStudents } = useContext(MyContext);
+    const { backendUrl, users, setUsers, token, students, setStudents } = useContext(MyContext);
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         axios
-            .get("http://localhost:4000/api/principal", {
+            .get(`${backendUrl}/api/principal`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
@@ -32,7 +32,7 @@ const StudentTable = () => {
 
     const handleDeleteUser = (id) => {
         axios
-            .delete(`http://localhost:4000/api/principal/${id}`, {
+            .delete(`${backendUrl}/api/principal/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
@@ -40,11 +40,11 @@ const StudentTable = () => {
             .then((res) => {
                 const newUsers = users.filter((item) => item.id !== id)
                 setUsers(newUsers)
-                enqueueSnackbar('Teacher Deleted Successfully', { variant: 'success' });
+                enqueueSnackbar('Student Deleted Successfully', { variant: 'success' });
 
             })
             .catch((error) => {
-                enqueueSnackbar('Failed to Delete teacher', { variant: 'error' });
+                enqueueSnackbar('Failed to Delete Student', { variant: 'error' });
                 console.log(error)
             });
     };

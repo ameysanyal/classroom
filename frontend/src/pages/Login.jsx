@@ -1,12 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from '../MyContext';
+import { useSnackbar } from 'notistack';
+import { FaEyeSlash } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import axios from 'axios'
 const Login = () => {
     const [email, setEmail] = useState('')
+    const [passType, setPassType] = useState(true)
     const [password, setPassword] = useState('')
-    const { userId, setUserId, token, setToken } = useContext(MyContext)
+    const [eye, setEye] = useState(false)
+    const { userId, setUserId, token, setToken, backendUrl } = useContext(MyContext)
     const navigate = useNavigate()
+    const { enqueueSnackbar } = useSnackbar();
 
     const bg = {
         backgroundImage:
@@ -24,7 +30,7 @@ const Login = () => {
             email, password
         }
         // console.log(data)
-        axios.post('http://localhost:4000/api/login', data).then((res) => {
+        axios.post(`${backendUrl}/api/login`, data).then((res) => {
 
             setToken(res.data.token)
             localStorage.setItem('authToken', res.data.token);
@@ -40,17 +46,21 @@ const Login = () => {
                 navigate("/principal-dashboard");
             }
             else if (res.data.userType === "Teacher") {
-                navigate(`/teacher-dashboard/${res.data.userId}/*`);
+                navigate(`/teacher-dashboard/${res.data.userId}/class-students`);
             }
             else if (res.data.userType === "Student") {
-                navigate(`/student-dashboard/${res.data.userId}/*`);
+                navigate(`/student-dashboard/${res.data.userId}/class-mates`);
             }
 
+            enqueueSnackbar('Logged-In Succesfully ', { variant: 'success' });
 
         }).catch((error) => {
             console.log(error)
+            enqueueSnackbar('Incorrect email or password', { variant: 'error' });
         })
     }
+
+
 
     return (
 
@@ -74,7 +84,7 @@ const Login = () => {
                             placeholder="Email"
                         />
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-6 relative">
                         <label
                             className="block text-gray-700 text-sm font-bold mb-2"
                             htmlFor="password"
@@ -86,9 +96,13 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                             id="password"
-                            type="password"
+                            type={passType ? "password" : "text"}
                             placeholder="Password"
                         />
+                        <span onClick={() => {
+                            setEye(!eye);
+                            setPassType(!passType)
+                        }} className="absolute right-2 top-9">{eye ? <FaEye size={20} /> : <FaEyeSlash size={20} />}</span>
                     </div>
                     <div className="flex items-center justify-center">
 
@@ -112,3 +126,4 @@ export default Login;
 //         Authorization: `Bearer ${token}`,
 //     }
 // })
+

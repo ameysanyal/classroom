@@ -8,7 +8,7 @@ const ClassDetails = ({ loggedIn }) => {
 
             <h1 className='text-2xl my-4 font-bold'>Your Class Details</h1>
 
-            <div className='flex flex-col border-2 border-sky-400 rounded-xl w-1/2 p-4'>
+            {loggedIn ? (<div className='flex flex-col border-2 border-sky-400 rounded-xl w-1/2 p-4'>
 
                 <div className='my-2'>
                     <span className='text-xl mr-4 text-gray-800'>Class Name:</span>
@@ -33,7 +33,9 @@ const ClassDetails = ({ loggedIn }) => {
                 </div>
 
             </div>
-
+            ) : (
+                <div>Loading...</div>
+            )}
 
         </div>
     )

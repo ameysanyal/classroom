@@ -16,12 +16,11 @@ function App() {
   const [userId, setUserId] = useState('')
   const [classStudents, setClassStudents] = useState([])
 
+  const backendUrl = "https://classroom-backend-qjs4.onrender.com"
 
   useEffect(() => {
 
-    // console.log(token)
-
-    axios.get("http://localhost:4000/api/principal", {
+    axios.get(`${backendUrl}/api/principal`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }
@@ -41,10 +40,10 @@ function App() {
     }).catch((err) => {
       console.log(err)
     })
-  }, [])
+  }, [token])
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/classroom", {
+    axios.get(`${backendUrl}/api/classroom`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }
@@ -54,20 +53,12 @@ function App() {
     }).catch((err) => {
       console.log(err)
     })
-  }, [])
-
-
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem('authToken');
-  //   if (storedToken && storedToken !== token) {
-  //     setToken(storedToken);
-  //   }
-  // }, []);
+  }, [token])
 
 
   return (
     <>
-      <MyContext.Provider value={{ users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId, token, setToken, students, setStudents, classStudents, setClassStudents }}>
+      <MyContext.Provider value={{ backendUrl, users, setUsers, classrooms, setClassrooms, teachers, setTeachers, userId, setUserId, token, setToken, students, setStudents, classStudents, setClassStudents }}>
 
         <Routes>
           <Route path='/' element={<Login />} />
