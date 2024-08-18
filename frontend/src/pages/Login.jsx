@@ -16,7 +16,7 @@ const Login = () => {
 
     const bg = {
         backgroundImage:
-            "url('../../public/bg-image.jpg')",
+            "url('./bg-image.jpg')",
         height: "100vh",
 
         backgroundSize: "cover",

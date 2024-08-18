@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import cors from 'cors'
-// import authRoutes from './routes/auth'
+import axios from 'axios'
 import principalRoutes from './routes/principal.route.js'
 import classroomRoutes from './routes/classroom.route.js'
 import loginRoutes from './routes/login.route.js'
