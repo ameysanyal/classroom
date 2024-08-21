@@ -10,6 +10,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { MyContext } from '../MyContext';
 
 
+
 const PrincipalDash = () => {
     const { users, setUsers, teachers, students, classrooms, setTeachers, setStudents, setClassrooms, setUserId, setToken } = useContext(MyContext)
     const navigate = useNavigate()
@@ -18,8 +19,8 @@ const PrincipalDash = () => {
         setUserId('')
         setToken('')
         localStorage.removeItem('authToken');
+        localStorage.removeItem('userId')
         navigate('/')
-
     }
 
     useEffect(() => {

@@ -19,6 +19,7 @@ const StudentDash = () => {
         setUserId('')
         setToken('')
         localStorage.removeItem('authToken');
+        localStorage.removeItem('userId')
         navigate('/')
     }
 

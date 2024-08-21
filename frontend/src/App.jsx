@@ -6,6 +6,8 @@ import TeacherDash from './pages/TeacherDash'
 import StudentDash from './pages/StudentDash'
 import { MyContext } from './MyContext.js'
 import axios from 'axios';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+
 function App() {
 
   const [token, setToken] = useState(localStorage.getItem('authToken'))
@@ -42,6 +44,7 @@ function App() {
     })
   }, [token])
 
+
   useEffect(() => {
     axios.get(`${backendUrl}/api/classroom`, {
       headers: {
@@ -62,12 +65,24 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path="/principal-dashboard/*" element={<PrincipalDash />} />
-          <Route path='/teacher-dashboard/:userId/*' element={<TeacherDash />} />
+          <Route path="/principal-dashboard/*" element={
+            <ProtectedRoute allowedUserType="Principal">
+              <PrincipalDash />
+            </ProtectedRoute>
+          } />
 
-          <Route path='/student-dashboard/:userId/*' element={<StudentDash userId={userId} />} />
+          <Route path='/teacher-dashboard/:userId/*' element={
+            <ProtectedRoute allowedUserType="Teacher">
+              <TeacherDash />
+            </ProtectedRoute>
+          } />
+
+          <Route path='/student-dashboard/:userId/*' element={
+            <ProtectedRoute allowedUserType="Student">
+              <StudentDash userId={userId} />
+            </ProtectedRoute>
+          } />
         </Routes>
-
 
       </MyContext.Provider>
     </>

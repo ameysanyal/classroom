@@ -25,6 +25,7 @@ const TeacherDash = () => {
         setUserId('')
         setToken('')
         localStorage.removeItem('authToken');
+        localStorage.removeItem('userId')
         navigate('/')
     }
 
@@ -37,9 +38,6 @@ const TeacherDash = () => {
         }).then((res) => {
             setUserName(res.data.name)
             setLoginTeacher(res.data)
-            setCurrentTeacherStudents(res.data.classroom.students)
-
-            console.log(`teacherstudents = ${currentTeacherStudents}`)
 
         }).catch((err) => {
             console.log(err)

@@ -21,7 +21,7 @@ const TeacherTable = () => {
                 'Authorization': `Bearer ${token}`,
             }
         }).then((res) => {
-            console.log(res.data)
+
             const onlyTeachers = res.data.data.filter((item) => item.userType === "Teacher")
             setTeachers(onlyTeachers)
         }).catch((err) => {

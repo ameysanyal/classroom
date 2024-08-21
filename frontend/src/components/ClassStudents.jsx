@@ -44,7 +44,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
 
     useEffect(() => {
         updateClassStudents();
-    }, [teachers, userName]); // Only run when teachers or userName changes
+    }, [teachers, userName]);
 
     useEffect(() => {
         axios.get(`${backendUrl}/api/principal`, {
@@ -61,7 +61,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
             .catch((err) => {
                 console.log(err);
             });
-    }, [token]); // Fetch only once when the component mounts
+    }, [token]);
 
     const handleDeleteUser = (id) => {
         axios.delete(`${backendUrl}/api/principal/${id}`, {
@@ -73,7 +73,7 @@ const ClassStudents = ({ userName, loggedIn }) => {
                 setUsers(users.filter((item) => item.id !== id));
                 enqueueSnackbar('User Deleted Successfully', { variant: 'success' });
 
-                // Update classStudents state directly after deletion
+
                 setClassStudents(prevStudents => prevStudents.filter(student => student._id !== id));
             })
             .catch((error) => {

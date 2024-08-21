@@ -46,7 +46,7 @@ const EditStudent = ({ onClose, indexid }) => {
             classroom
         };
 
-        console.log(data)
+
         axios.put(`${backendUrl}/api/principal/${indexid}`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`,

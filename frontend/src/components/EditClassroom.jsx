@@ -38,6 +38,14 @@ const EditClassroom = ({ onClose, indexId }) => {
     }, [])
 
     const handleEditClassroom = () => {
+        console.log("Start Day:", startDay);
+        console.log("End Day:", endDay);
+
+        if (startDay === "Select Day" || startDay === '' || endDay === "Select Day" || endDay === '') {
+            enqueueSnackbar('Please select a both days.', { variant: 'warning' });
+            return;
+        }
+
 
         const data = {
             name,
@@ -71,22 +79,22 @@ const EditClassroom = ({ onClose, indexId }) => {
                         }
                     ]
                 }
-                console.log(stateUpdate)
+
                 const update = classrooms.map((item) => {
                     if (item._id === indexId) {
                         return stateUpdate;
                     }
                     return item
                 })
-                // console.log(update)
+
                 setClassrooms(update)
 
-                console.log(res)
+
                 onClose()
                 enqueueSnackbar('Details Updated Successfully', { variant: 'success' });
             }).catch((error) => {
                 console.log(error)
-                enqueueSnackbar('Failed to Update Details,check user already exist or not', { variant: 'error' });
+                enqueueSnackbar('Failed to Update Details', { variant: 'error' });
             })
     }
 
@@ -100,8 +108,8 @@ const EditClassroom = ({ onClose, indexId }) => {
                 <div className='flex flex-row justify-center items-center'>
                     <div className='flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-2 mx-auto'>
 
-                        <div className='my-2'>
-                            <label className='text-xl mr-4 text-white'>Name</label>
+                        <div className='flex my-2'>
+                            <label className='text-xl mr-4 text-white'>Name:</label>
                             <input
                                 type='text'
                                 value={name}
@@ -109,7 +117,7 @@ const EditClassroom = ({ onClose, indexId }) => {
                                 className='border-2 border-gray-500 p-1 w-full'
                             />
                         </div>
-                        <div className='my-2'>
+                        <div className='flex items-center justify-center my-2'>
                             <label className='text-xl m-2 text-white'>StartDay:</label>
                             <select
                                 value={startDay}
@@ -129,11 +137,11 @@ const EditClassroom = ({ onClose, indexId }) => {
                                 {days.map((d, i) => <option key={i} value={d}>{d}</option>)}
                             </select>
                         </div>
-                        <div className='my-2'>
+                        <div className='flex items-center justify-center my-2'>
                             <label className='text-xl m-4 text-white'>StartTime:</label>
-                            <TimePicker onChange={setStartTime} value={startTime} format="h:mm a" />
+                            <TimePicker className="border-1 border-gray-500 p-1 bg-white" disableClock={true} onChange={setStartTime} value={startTime} format="h:mm a" />
                             <label className='text-xl m-4 text-white'>EndTime:</label>
-                            <TimePicker onChange={setEndTime} value={endTime} format="h:mm a" />
+                            <TimePicker className="border-1 border-gray-500 p-1 bg-white" disableClock={true} onChange={setEndTime} value={endTime} format="h:mm a" />
 
                         </div>
                         <button className='p-2 bg-sky-300 m-2 w-1/2 self-center' onClick={handleEditClassroom}>

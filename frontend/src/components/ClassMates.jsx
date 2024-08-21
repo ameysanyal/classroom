@@ -18,7 +18,6 @@ const ClassMates = ({ userName }) => {
             }
         }
 
-        console.log(`classStudents:`, classStudents);
 
     }, [userName, students]);
 

@@ -12,7 +12,7 @@ const CreateStudent = () => {
     const { enqueueSnackbar } = useSnackbar();
 
     const handleSaveUser = async () => {
-        // Ensure classroom is selected
+
         if (!classroom || classroom === "Select Class") {
             enqueueSnackbar('Please select a class.', { variant: 'warning' });
             return;
@@ -52,7 +52,6 @@ const CreateStudent = () => {
 
             // Update the local state with the new user
 
-            // console.log(JSON.stringify(response.data))
 
             const updatedUsers = [...users, response.data];
             setUsers(updatedUsers);

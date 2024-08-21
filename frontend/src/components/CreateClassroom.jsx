@@ -23,8 +23,8 @@ const CreateClassroom = () => {
 
     const handleSaveClassroom = () => {
 
-        if (startDay === "Select Class" || endDay === "Select Class") {
-            enqueueSnackbar('Please select a class.', { variant: 'warning' });
+        if (startDay === "Select Day" || startDay === '' || endDay === "Select Day" || endDay === '') {
+            enqueueSnackbar('Please select a both days.', { variant: 'warning' });
             return;
         }
 
@@ -109,10 +109,8 @@ const CreateClassroom = () => {
         }
 
         setNotAssigned(notAssignedTeachers);
-        console.log(`in calculate teachers`)
-        console.log(notAssigned)
-    };
 
+    };
 
     useEffect(() => {
         calculateNotAssignedTeachers();
@@ -123,8 +121,8 @@ const CreateClassroom = () => {
 
         <div className='flex flex-row justify-center items-center m-10'>
             <div className='flex flex-col border-2 border-gray-800  rounded-xl w-[600px] p-2 mx-auto'>
-                <div className='my-2'>
-                    <label className='text-xl mr-2'>Name</label>
+                <div className='flex my-2'>
+                    <label className='text-xl mr-2'>Name:</label>
                     <input
                         type='text'
                         value={name}
@@ -144,7 +142,7 @@ const CreateClassroom = () => {
                         {notAssigned.map((na, i) => <option key={i} value={na._id}>{na.name}</option>)}
                     </select>
                 </div>
-                <div className='my-2'>
+                <div className='flex items-center justify-center my-2'>
                     <label className='text-xl m-2'>StartDay:</label>
                     <select
                         value={startDay}
@@ -154,7 +152,7 @@ const CreateClassroom = () => {
                         className='border-2 border-gray-500 p-1 w-1/4' name="startDay" id="startDay">
                         {days.map((d, i) => <option key={i} value={d}>{d}</option>)}
                     </select>
-                    <label className='text-xl m-2 '>EndDay:</label>
+                    <label className='text-xl m-2'>EndDay:</label>
                     <select
                         value={endDay}
                         onChange={(e) => {
@@ -164,12 +162,11 @@ const CreateClassroom = () => {
                         {days.map((d, i) => <option key={i} value={d}>{d}</option>)}
                     </select>
                 </div>
-                <div className='my-2'>
-                    <label className='text-xl m-4'>StartTime:</label>
-                    <TimePicker onChange={setStartTime} value={startTime} format="h:mm a" />
-                    <label className='text-xl m-4 '>EndTime:</label>
-                    <TimePicker onChange={setEndTime} value={endTime} format="h:mm a" />
-
+                <div className='flex items-center justify-center my-2'>
+                    <label className='text-xl m-2'>StartTime:</label>
+                    <TimePicker className="border-1 border-gray-500 p-1" disableClock={true} onChange={setStartTime} value={startTime} format="h:mm a" />
+                    <label className='text-xl m-2'>EndTime:</label>
+                    <TimePicker className="border-1 border-gray-500 p-1" disableClock={true} onChange={setEndTime} value={endTime} format="h:mm a" />
                 </div>
 
                 <button className='p-2 bg-gray-800  m-2 w-1/4 font-bold self-center text-white' onClick={handleSaveClassroom}>
@@ -182,3 +179,5 @@ const CreateClassroom = () => {
 }
 
 export default CreateClassroom
+
+
